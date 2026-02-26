@@ -11,16 +11,15 @@ inputBtn.addEventListener('click', async (e) => {
     password: inputPwd.value,
   }
   // Envoyer le contenu de mon input sur le serveur (API) méthode post
-  const datas = await fetch('http://localhost:3000/api/auth/register', {
+  const datas = await fetch('http://localhost:3000/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(obj),
     headers: {
       'Content-type': 'application/json',
     }
   })
-
   const user = await datas.json()
   localStorage.setItem("token", user.token)
 
-  window.location = "/login.html";
+  window.location = "/index.html"
 })
