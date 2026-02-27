@@ -22,5 +22,7 @@ inputBtn.addEventListener('click', async (e) => {
   const user = await datas.json()
   localStorage.setItem("token", user.token)
 
-  window.location = "/login.html";
+  if(user.token){
+    window.location = "/login.html";
+  }
 })
