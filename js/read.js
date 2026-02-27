@@ -1,27 +1,52 @@
 async function getQuotes() {
   try {
-    let req = await fetch('http://localhost:3000/api/quote/aiquote');
+    let req = await fetch('http://localhost:3000/api/quote/all');
 
-    let data = await req.json();
+    let datas = await req.json();
 
     let quoteList = document.getElementById('quoteList');
 
-    quoteList.insertAdjacentHTML('beforeend',
-      `<li>
-          Citation : ${data.quote} | Auteur : ${data.author} <button>Supprimer</button>
-      </li>`
-    );
+    datas.forEach(data => {
+      quoteList.insertAdjacentHTML('beforeend',
+        `<li>
+          Citation : ${data.quote} | Auteur : ${data.author} <button data-id="${data.id}">Supprimer</button>
+        </li>`
+      )
+    });
 
-    const delBtn = document.querySelector('button')
-    
-    delBtn.addEventListener('click', async function() {
+    const addButton = document.getElementById('addButton')
+    addButton.addEventListener('click', async function(e) {
+      e.preventDefault();
+
+      const addQuote = document.getElementById('addQuote')
+      const addAuthor = document.getElementById('addAuthor')
+
+      const obj = {
+        quote: addQuote.value,
+        author: addAuthor.value,
+      }
+      
       const token = localStorage.getItem('token')
-      const datas = await fetch(`http://localhost:3000/api/quote/aiquote`, {
-        method: 'DELETE',
-        headers: {Authorization: `Bearer ${token}`}
+      const datas = await fetch('http://localhost:3000/api/quote/', {
+        method: 'POST',
+        body: JSON.stringify(obj),
+        headers: {
+          'Content-type': 'application/json',
+          Authorization: `Bearer ${token}`}
       })
       console.log(await datas.json())
     })
+
+    // const delBtn = document.querySelector('button')
+    
+    // delBtn.addEventListener('click', async function() {
+    //   const token = localStorage.getItem('token')
+    //   const datas = await fetch(`http://localhost:3000/api/quote/`, {
+    //     method: 'DELETE',
+    //     headers: {Authorization: `Bearer ${token}`}
+    //   })
+    //   console.log(await datas.json())
+    // })
     
   } catch (e) {
     console.error("Une erreur s'est produite : ", e)
