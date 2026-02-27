@@ -38,18 +38,22 @@ async function getQuotes() {
     })
     
 
-    const delBtn = document.querySelector(`button`)
+    const delBtns = document.querySelectorAll(`button`)
 
-    delBtn.addEventListener('click', async function(e) {
+    delBtns.forEach(delBtn => {
+      delBtn.addEventListener('click', async function(e) {
       const id = this.dataset.id
       const token = localStorage.getItem('token')
       const datas = await fetch(`http://localhost:3000/api/quote/${id}`, {
         method: 'DELETE',
         headers: {Authorization: `Bearer ${token}`}
       })
-      console.log(await datas.json())
+      // récupérer l'élement li le plus proche (closet) et faire un .remove()
+      this.closest('li').remove()
     })
-    
+
+    })
+
   } catch (e) {
     console.error("Une erreur s'est produite : ", e)
   }
